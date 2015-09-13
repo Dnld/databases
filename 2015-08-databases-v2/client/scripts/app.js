@@ -22,6 +22,7 @@ var getMessages = function() {
 
 var displayMessages = function(data) {
   // initialize local vars
+  console.log(data);
   data = JSON.parse(data);
   var messages = data.results.reverse(); // order mesgs from server in reverse chrono
   var message;
