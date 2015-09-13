@@ -11,7 +11,7 @@ module.exports = {
       });
     },
     post: function (req, res) {
-      console.log(req.body);
+      models.messages.post(req.body);
     }
   },
 
@@ -21,7 +21,12 @@ module.exports = {
         res.json(results);
       });
     },
-    post: function (req, res) {}
+    post: function(req, res) {
+      var name = req.body['username'];
+      models.users.post(name, function() {
+        res.end();
+      });
+    }
   }
 };
 

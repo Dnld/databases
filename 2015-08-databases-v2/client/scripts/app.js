@@ -23,16 +23,16 @@ var getMessages = function() {
 var displayMessages = function(data) {
   // initialize local vars
   console.log(data);
-  data = JSON.parse(data);
+  // data = JSON.parse(data);
   var messages = data.results.reverse(); // order mesgs from server in reverse chrono
   var message;
-  var roomName;
+  var room;
   var i;
 
   // Disregard previously displayed messages
   if (recentMessageId !== undefined) {
     for (i = 0; i < messages.length; i++) {
-      if (messages[i].objectId === recentMessageId) {
+      if (messages[i].id === recentMessageId) {
         messages.splice(0, i+1);
         break;
       }
@@ -42,21 +42,21 @@ var displayMessages = function(data) {
   // Add messages to document in reverse chronological order
   for (i = 0; i < messages.length; i++) {
     message = messages[i];
-    roomName = message.roomname;
+    room = message.room;
 
-    // cleanup unwanted values in roomName
-    roomName = (roomName === undefined || roomName === null || roomName.trim() === '') ?
+    // cleanup unwanted values in room
+    room = (room === undefined || room === null || room.trim() === '') ?
                 'messages' :
-                roomName.trim();
+                room.trim();
 
-    updateRooms(roomName);
+    updateRooms(room);
 
     // TODO: Display time in local timezone
-    var $date = ($.format.date(message.createdAt, 'MMM d h:mm:ss p'));
+    var $date = ($.format.date(message.date, 'MMM d h:mm:ss p'));
 
     // Creating Message DOM element and prepending to feed
-    var $newMessage = $('<div class="message" data-roomname="' +
-                        _.escape(roomName) + '"></div>');
+    var $newMessage = $('<div class="message" data-room="' +
+                        _.escape(room) + '"></div>');
     $newMessage.html(
       '<div class="message-date">' + $date +
       '</div><div class="username"><a href="#" class="username-link">' +
@@ -90,7 +90,7 @@ $('.submit-btn').on('click', function(event){
   var message = {
     username: userName,
     text: _.escape($textInput.val()),
-    roomname: selectedRoom
+    room: selectedRoom
   };
 
   // AJAX Post to Parse server
@@ -126,9 +126,9 @@ var updateRooms = function(room) {
 };
 
 // Show/Hide messages based on user selected Room
-var filterMessagesByRoom = function(roomName) {
+var filterMessagesByRoom = function(room) {
   $('.message').each(function(){
-    if ((roomName === 'messages') || ($(this).data('roomname') === roomName)) {
+    if ((room === 'messages') || ($(this).data('room') === room)) {
       $(this).show();
     } else {
       $(this).hide();
