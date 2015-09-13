@@ -31,25 +31,17 @@ module.exports = {
     post: function(message, callback) {
       var usernameQuery = 'select id from users where username = ? limit 1';
       db.connection.query(usernameQuery, message['username'], function(err, results) {
-        if (err) {
-          console.log('could not get username from DB');
+        if (results[0]) {
+          postMessage(message, results);
         } else {
-          if (results[0]) {
-            postMessage(message, results);
-          } else {
-            var queryString = 'insert into users SET ?'
-            db.connection.query(queryString, {username: message['username']}, function(err, results) {
-              db.connection.query(usernameQuery, message['username'], function(err, results) {
-                if (err) {
-                  console.log('could not get username from DB');
-                } else {
-                  if (results[0]) {
-                    postMessage(message, results);
-                  }
-                }  
-              });
+          var queryString = 'insert into users SET ?'
+          db.connection.query(queryString, {username: message['username']}, function(err, results) {
+            db.connection.query(usernameQuery, message['username'], function(err, results) {
+              if (results[0]) {
+                postMessage(message, results);
+              }
             });
-          }
+          });
         }
       });
     }
