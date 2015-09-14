@@ -7,7 +7,7 @@ var queryDB = function(query, callback) {
     } else {
       callback(results);
     }
-  })
+  });
 };
 
 var postMessage = function(message, results) {
@@ -25,7 +25,7 @@ var postMessage = function(message, results) {
 module.exports = {
   messages: {
     get: function(callback) {
-      var queryString = 'select id, (select username from users where id = messages.userid) as username, text, room, date from messages'
+      var queryString = 'select id, (select username from users where id = messages.userid) as username, text, room, date from messages';
       queryDB(queryString, callback);
     },
     post: function(message, callback) {
@@ -34,7 +34,7 @@ module.exports = {
         if (results[0]) {
           postMessage(message, results);
         } else {
-          var queryString = 'insert into users SET ?'
+          var queryString = 'insert into users SET ?';
           db.connection.query(queryString, {username: message['username']}, function(err, results) {
             db.connection.query(usernameQuery, message['username'], function(err, results) {
               if (results[0]) {
@@ -53,10 +53,10 @@ module.exports = {
       queryDB(queryString, callback);
     },
     post: function(name, callback) {
-      var queryString = 'insert into users (username) values ?'
+      var queryString = 'insert into users (username) values ?';
       db.connection.query(queryString, [name], function(err, results) {
         callback();
-      })
+      });
     }
   }
 };
