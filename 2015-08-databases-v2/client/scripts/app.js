@@ -60,7 +60,7 @@ var displayMessages = function(data) {
     $newMessage.html(
       '<div class="message-date">' + $date +
       '</div><div class="username"><a href="#" class="username-link">' +
-      _.escape(message.username) + '</a></div><div class="message-text">' +
+      _.escape(message.User.username) + '</a></div><div class="message-text">' +
       _.escape(message.text) + '</div>');
 
     // Apply special css to friend's messages

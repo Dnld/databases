@@ -17,7 +17,7 @@ module.exports = {
 
   users: {
     get: function(req, res) {
-      models.users.get(function(err, results) {
+      models.users.get(name, function(err, results) {
         res.json(results);
       });
     },
